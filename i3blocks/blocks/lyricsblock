@@ -1,0 +1,5 @@
+#!/bin/bash
+[[ $BLOCK_BUTTON = "2" ]] && playerctl play-pause && xterm -hold -e python /home/marco/bin/lyrics
+echo "📄"
+
+
