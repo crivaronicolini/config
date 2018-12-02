@@ -185,19 +185,19 @@ context = ctrl+shift+period
 frame_color = $color7
 foreground = $color7
 background = $color2
-timeout = 3
+timeout = 2
 
 [urgency_normal]
 frame_color = $color7
 foreground = $color7
 background = $color2
-timeout = 4
+timeout = 3
 
 [urgency_critical]
-frame_color = $color7
+    frame_color = $color2
 foreground = $color7
 background = $color2
-timeout = 0
+timeout = 3
 
 
 # Every section that isn't one of the above is interpreted as a rules to
@@ -213,6 +213,7 @@ timeout = 0
 # The script will be called as follows:
 #   script appname summary body icon urgency
 # where urgency can be "LOW", "NORMAL" or "CRITICAL".
+
 #
 # NOTE: if you don't want a notification to be displayed, set the format
 # to "".

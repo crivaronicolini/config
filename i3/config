@@ -14,13 +14,13 @@ exec --no-startup-id nm-applet
 exec --no-startup-id sudo mount -a
 
 #exec_always --no-startup-id exec feh --bg-scale ~/.config/wall.png
-#exec_always --no-startup-id exec wal -c -a 90 -i ~/.config/wall.png 
+exec_always --no-startup-id exec wal -c -a 90 -i ~/.config/wall.png 
 
 #Remaps the caps lock button to escape and uses the US international keyboard with dead keys
 exec_always --no-startup-id setxkbmap -layout latam -option caps:escape
 
 #compton con mi confij
-exec /usr/bin/compton
+exec_always /usr/bin/compton
 
 #redshift
 exec --no-startup-id redshift-gtk
@@ -91,14 +91,15 @@ hide_edge_borders both
 for_window [class="^.*"] border pixel 4
 
 for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move up 10 px
+for_window [title="eltiempo"] floating enable, resize set 780 580, move position center
 
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+#bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+m exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+m exec "i3-nagbar -t warning -m 'Tas seguro gil?' -b 'Si boludo' 'i3-msg exit'"
 
 bar {
         i3bar_command i3bar -t
@@ -158,13 +159,13 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 #audio botones
-#bindsym XF86AudioPlay exec playerctl play-pause && exec mocp -G
-#bindsym XF86AudioNext exec playerctl next && exec mocp -f
-#bindsym XF86AudioPrev exec playerctl previous && exec mocp -r
+bindsym XF86AudioPlay exec playerctl play-pause && exec mocp -G
+bindsym XF86AudioNext exec playerctl next && exec mocp -f
+bindsym XF86AudioPrev exec playerctl previous && exec mocp -r
 
-bindsym XF86AudioPlay exec mocp -G
-bindsym XF86AudioNext exec mocp -f
-bindsym XF86AudioPrev exec mocp -r
+#bindsym XF86AudioPlay exec mocp -G && exec playerctl play-pause 
+#bindsym XF86AudioNext exec mocp -f && exec playerctl next 
+#bindsym XF86AudioPrev exec mocp -r && exec playerctl previous 
 
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5% && exec pkill -RTMIN+5 i3blocks  #increase sound volume

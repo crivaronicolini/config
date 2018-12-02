@@ -5,7 +5,7 @@
 #
 ###################################
 [global]
-    font = xft:monospace:size=8 8
+    font = xft:monospace:size=10 8
 
 # Allow a small subset of html markup:
 #   <b>bold</b>
@@ -126,7 +126,7 @@ line_height = 3
 # Draw a line of "separatpr_height" pixel height between two
 # notifications.
 # Set to 0 to disable.
-separator_height = 2
+separator_height = 8
 
 # Padding between text and separator.
 padding = 6
@@ -140,7 +140,7 @@ horizontal_padding = 6
 #  * foreground: use the same color as the foreground;
 #  * frame: use the same color as the frame;
 #  * anything else will be interpreted as a X color.
-separator_color = frame
+separator_color = "#000000000"
 
 # Print a notification on startup.
 # This is mainly for error detection, since dbus (re-)starts dunst
@@ -155,13 +155,13 @@ browser = /usr/bin/firefox -new-tab
 
 # Align icons left/right/off
 icon_position = off
-max_icon_size = 80
+max_icon_size = 99
 
 # Paths to default icons.
 icon_folders = /usr/share/icons/Paper/16x16/mimetypes/:/usr/share/icons/Paper/48x48/status/:/usr/share/icons/Paper/16x16/devices/:/usr/share/icons/Paper/48x48/notifications/:/usr/share/icons/Paper/48x48/emblems/
 
     frame_width = 3
-    frame_color = "#e7d8d6"
+    frame_color = "#c6cee1"
 
 [shortcuts]
 
@@ -188,22 +188,22 @@ context = ctrl+shift+period
 [urgency_low]
 # IMPORTANT: colors have to be defined in quotation marks.
 # Otherwise the "#" and following would be interpreted as a comment.
-    frame_color = "#e7d8d6"
-    foreground = "#e7d8d6"
-    background = "#A37D7F"
-timeout = 3
+    frame_color = "#c6cee1"
+    foreground = "#c6cee1"
+    background = "#6B8AB0"
+timeout = 2
 
 [urgency_normal]
-    frame_color = "#e7d8d6"
-    foreground = "#e7d8d6"
-    background = "#A37D7F"
-timeout = 4
+    frame_color = "#c6cee1"
+    foreground = "#c6cee1"
+    background = "#6B8AB0"
+timeout = 3
 
 [urgency_critical]
-    frame_color = "#e7d8d6"
-    foreground = "#e7d8d6"
-    background = "#A37D7F"
-timeout = 0
+    frame_color = "#c6cee1"
+    foreground = "#c6cee1"
+    background = "#6B8AB0"
+timeout = 3
 
 
 # Every section that isn't one of the above is interpreted as a rules to
@@ -219,6 +219,7 @@ timeout = 0
 # The script will be called as follows:
 #   script appname summary body icon urgency
 # where urgency can be "LOW", "NORMAL" or "CRITICAL".
+
 #
 # NOTE: if you don't want a notification to be displayed, set the format
 # to "".

@@ -4,9 +4,10 @@ alias vimrc='vim ~/_vimrc'
 alias i3rc="vim ~/.config/i3/config"
 
 #PROGRAMAS
-alias v="vim "
+#alias v="vim "
 alias calc="python -i ~/bin/uncert.py"
 alias r='ranger --choosedir=$HOME/.config/.rangerdir; LASTDIR=`cat $HOME/.config/.rangerdir`; cd "$LASTDIR"'
+alias cht='curl cht.sh/'
 
 #BASG
 alias rmdir="rm -r"
