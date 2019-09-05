@@ -2,50 +2,96 @@ execute pathogen#infect()
 set nocompatible
 set langmenu=en_US
 let $LANG = 'en_US'
-let mapleader=";"
+let mapleader=" "
 
+"""COLOR"""
 filetype off
 syntax on
 filetype plugin indent on
 syntax enable
 set background=light
 colorscheme PaperColor
+"""COLOR"""
 
+"""""SETTINGS"""""
+"highligh de python en markdown
+let g:markdown_fenced_languages = ['python']
+let g:pandoc#syntax#codeblocks#embeds#langs = ['python']
+
+"para hacer que el output de python se vea
+let $PYTHONUNBUFFERED=1
+let g:asyncrun_open=8
 
 "highlight Comment cterm=italic
 let g:rainbow_active = 1
+
 "cosas de python
 let python_highlight_all = 1
+
 "pone netrw en modo arbol
 let g:netrw_liststyle=3
 "autocmd Filetype python set omnifunc=python3complete#Complete
-setlocal omnifunc=jedi#completions
+" setlocal omnifunc=jedi#completions
 
+" Give me a prompt instead of just rejecting risky :write, :saveas
+set confirm
+
+" Break lines at word boundaries
+set linebreak
+
+" Show search matches as I type my pattern
 set incsearch
+set noswapfile
+set ttyfast
 set noshowmode
 set writebackup
 set smartcase
-set splitright
 set path+=**
 set expandtab
 set textwidth=79
 set tabstop=8
 set softtabstop=4
 set shiftwidth=4
-set scrolloff=6 
+set scrolloff=6
 set autoindent
-set ruler
 set matchtime=1
 set mouse=a
 set laststatus=2
-" set statusline=%<%f\ \ @\ %F\ \ %h%m%r%=%-14.(%l,%c%V%)\ %P
-"podes usar backspace sin parar
 set backspace=indent,eol,start
-"expand tab en command
+
+"wildmode settings
+"set wildmenu
 set wildmode=longest,full
+silent! set wildignorecase  " Case insensitive, if supported
+
+" New windows go below or to the right of a split
+set splitbelow splitright
+
+" Don't assume I'm editing C; let the filetype set this
+set include=
+
+" Keep much more command and search history
+set history=2000
+
+" Delete comment leaders when joining lines, if supported
+silent! set formatoptions+=j
+
+" Don't wait for a key after Escape in insert mode
+silent! set noesckeys
+
+" Try to keep undos in one dir
+set undolevels=1000
+set undofile
+set undodir^=~/.vim/cache/undo
+
+" Try to keep backups in one system-appropriate dir
+set backup
+set backupdir^=~/.vim/cache/backup
+"""""SETTINGS"""""
 
 
 
+" easier navigation between split windows
 if has('nvim')
     "ir a ventana con C-direccion
     tmap <C-h> <C-\><C-n><C-w>h
@@ -60,19 +106,29 @@ if has('nvim')
     tmap <C-y>k <Up><C-\><C-n>yy<C-k>Gp
     tmap <C-y>l <Up><C-\><C-n>yy<C-l>Gp
 endif
-" <C-l><Down><Down>a 
-" <C-k><Down><Down>a 
-" <C-j><Down><Down>a 
-" <C-h><Down><Down>a 
 
-" easier navigation between split windows
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" Window Resizing {{{
+" right/up : bigger
+" left/down : smaller
+nmap <S-Right> :vertical resize +3<cr>
+nmap <S-Left> :vertical resize -3<cr>
+nmap <S-Up> :resize +3<cr>
+nmap <S-Down> :resize -3<cr>
 
-"#####MAPEOS#####
+"""""MAPEOS"""""
+
+" Cycle through buffers
+nnoremap {b :bprevious<CR>
+nnoremap }b :bnext<CR>
+nnoremap <Leader>b :b#<CR>
+" Cycle through quicklist/:helpgrep items
+nnoremap {c :cprevious<CR>
+nnoremap }c :cnext<CR>
 
 "usa lead y d para copiar y pegar al portapapeles
 nnoremap <Leader>y "+y
@@ -86,20 +142,39 @@ nnoremap <Leader>P :set paste<CR>"+P:set nopaste<CR>
 vnoremap <Leader>p :set paste<CR>"+p:set nopaste<CR>
 vnoremap <Leader>P :set paste<CR>"+P:set nopaste<CR>
 
+" \DEL deletes the current buffer
+nnoremap <Leader><Bslash> :bdelete<CR>
+" \INS edits a new buffer
+nnoremap <Leader><CR> :<C-U>enew<CR>
+
+" \g changes directory to the current file's location
+nnoremap <Leader>c :<C-U>cd %:h<CR>:pwd<CR>
+
+" Lead u pone el UndoTree
+nnoremap <Leader>u :UndotreeToggle<CR>
+
+" \R reloads ~/.vimrc
+nnoremap <Leader>R :<C-U>source $MYVIMRC<CR><CR>
+
+" \? types :helpgrep for me ready to enter a search pattern
+nnoremap <Leader>? :<C-U>helpgrep \c<S-Left>
 
 "usa S para reemplazar
-nnoremap S :%s//g<Left><Left>
+nnoremap <Leader>S :%s//g<Left><Left>
+nnoremap <Leader>s :s//g<Left><Left>
 
 "abre y cierra goyo
-nmap <F2> :Goyo 100<CR>
-nmap <F3> :Goyo!<CR>
+nmap <Leader>g :Goyo<CR>
+" nmap <F3> :Goyo!<CR>
 
 "hv para help vertical
-cmap vh vert h 
+cmap vh vert h
 
 "borra toda una palabra en insert
 nnoremap <S-BS> <C-w>
-inoremap ;shp #!/usr/bin/env python
+
+"shebang python
+nnoremap <Leader>hp #!/usr/bin/env python3
 
 "deja hacer las cosas cuando tipeas rápido
 cnoreabbrev W w
@@ -123,7 +198,7 @@ noremap P $p
 nnoremap ñ o<Esc>
 nnoremap Ñ O<Esc>
 
-"usa Ctrl-u para rehacer 
+"usa Ctrl-u para rehacer
 noremap <C-u> <C-r>
 
 "F9 para repasar spelling
@@ -137,52 +212,52 @@ nnoremap <silent> <F4> :noh<CR>
 
 "corta el undo tree en cada punto, asi no se borra todo con un u
 autocmd Filetype markdown inoremap . .<c-g>u
+autocmd Filetype markdown inoremap ¿ `
+
+
 
 "ejecuta el archivo actual
-autocmd Filetype markdown map <F5> :w <bar> !pandoc<space><C-r>%<space>--pdf-engine=pdflatex<space>-o<space> %:r.pdf<CR><CR>
+autocmd Filetype markdown map <F5> :!clear<CR><CR> :w<bar>!pandoc <C-r>% --pdf-engine=pdflatex -o %:p:h/pdf/%:r.pdf --variable urlcolor=blue -V geometry:margin=1in<CR>
+
+autocmd BufNewFile,BufReadPost *.pmd set filetype=pweave syntax=pweave
+
+autocmd Filetype pweave map <F5> :w <bar>:!pweave -o %:r.md -f markdown %<CR>:!pandoc <C-r> %:r.md --pdf-engine=pdflatex -o  %:p:h/pdf/%:r.pdf<CR>
+
 autocmd! BufWritePost _vimrc source %
-autocmd Filetype python map <F5> :w <bar> !python3<space><C-r>%<space><Enter>
 
-map <leader>o :!zathura <c-r>%.pdf >/dev/null 2>&1 &<CR><CR>
-    
-"# MAPEOS MARKDOWN - LATEX 
+autocmd Filetype python map <F5> :w <bar> AsyncRun python3 %<CR> 
+":!clear<CR><CR> :w <bar> !python3<space><C-r>%<space><Enter>
 
-"inoremap <Tab><Tab> <Esc>/<++><Enter>"_c4l
-"vnoremap <Tab><Tab> <Esc>/<++><Enter>"_c4l
-"map <Tab><Tab> <Esc>/<++><Enter>"_c4l
-"inoremap ;gg <++><Esc>a
-
-autocmd Filetype mkd,markdown inoremap { {}<++><Esc>F}i
-autocmd Filetype mkd,markdown inoremap $ $$<Esc>i
-autocmd Filetype mkd,markdown inoremap ;f \frac{}{<++>}<++><Esc>2F{a
+map <leader>o :!zathura %:p:h/pdf/%:r.pdf >/dev/null 2>&1 &<CR><CR>
 
 "tips"
 ":%y+" copia todo el buffer
 
 
 "FUNCIONES
-function! MathAndLiquid()
-    "" Define certain regions
-    " Block math. Look for "$$[anything]$$"
-    syn region math start=/\$\$/ end=/\$\$/
-    " inline math. Look for "$[not $][anything]$"
-    syn match math_block '\$[^$].\{-}\$'
-    " Liquid single line. Look for "{%[anything]%}"
-    syn match liquid '{%.*%}'
-    " Liquid multiline. Look for "{%[anything]%}[anything]{%[anything]%}"
-    syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
-    " Fenced code blocks, used in GitHub Flavored Markdown (GFM)
-    syn region highlight_block start='```' end='```'
+" function! MathAndLiquid()
+"     "" Define certain regions
+"     " Block math. Look for "$$[anything]$$"
+"     syn region math start=/\$\$/ end=/\$\$/
+"     " inline math. Look for "$[not $][anything]$"
+"     syn match math_block '\$[^$].\{-}\$'
+"     " Liquid single line. Look for "{%[anything]%}"
+"     syn match liquid '{%.*%}'
+"     " Liquid multiline. Look for "{%[anything]%}[anything]{%[anything]%}"
+"     syn region highlight_block start='{% highlight .*%}' end='{%.*%}'
+"     " Fenced code blocks, used in GitHub Flavored Markdown (GFM)
+"     syn region highlight_block start='```' end='```'
 
-    "" Actually highlight those regions.
-    hi link math Statement
-    hi link liquid Statement
-    hi link highlight_block Function
-    hi link math_block Function
-endfunction
+"     "" Actually highlight those regions.
+"     hi link math Statement
+"     hi link liquid Statement
+"     hi link highlight_block Function
+"     hi link math_block Function
+" endfunction
 
-" Call everytime we open a Markdown file
-autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+" " Call everytime we open a Markdown file
+" autocmd BufRead,BufNewFile,BufEnter *.md,*.markdown call MathAndLiquid()
+
 
 
 set number relativenumber
@@ -223,3 +298,12 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+
+" Make sure Vim returns to the same line when you reopen a file.
+augroup line_return
+    au!
+    au BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+augroup END
