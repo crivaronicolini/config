@@ -5,22 +5,32 @@ let $LANG = 'en_US'
 let mapleader=" "
 
 """COLOR"""
-filetype off
+" filetype off
 syntax on
 filetype plugin indent on
 syntax enable
-set background=light
+set background=dark
 colorscheme PaperColor
 """COLOR"""
+call plug#begin()
 
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+call plug#end()
 """""SETTINGS"""""
 "highligh de python en markdown
 let g:markdown_fenced_languages = ['python']
 let g:pandoc#syntax#codeblocks#embeds#langs = ['python']
 
+let g:semshi#error_sign_delay = 5
+
 "para hacer que el output de python se vea
 let $PYTHONUNBUFFERED=1
 let g:asyncrun_open=8
+let g:asyncrun_exit = "silent call system('afplay ~/.vim/notify.wav &')"
+
+let g:neoterm_default_mod='vertical' " open terminal in bottom split
+let g:neoterm_size=66 " terminal split size
+let g:neoterm_autoscroll=1 " scroll to the bottom when running a command
 
 "highlight Comment cterm=italic
 let g:rainbow_active = 1
@@ -28,9 +38,14 @@ let g:rainbow_active = 1
 "cosas de python
 let python_highlight_all = 1
 
+let g:asyncrun_status = ''
+let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
+
 "pone netrw en modo arbol
-let g:netrw_liststyle=3
-"autocmd Filetype python set omnifunc=python3complete#Complete
+" let g:netrw_liststyle=3
+let g:dirvish_mode = 'sort ,^.*[\/],'
+
+autocmd Filetype python set omnifunc=python3complete#Complete
 " setlocal omnifunc=jedi#completions
 
 " Give me a prompt instead of just rejecting risky :write, :saveas
@@ -48,7 +63,7 @@ set writebackup
 set smartcase
 set path+=**
 set expandtab
-set textwidth=79
+set textwidth=0
 set tabstop=8
 set softtabstop=4
 set shiftwidth=4
@@ -65,7 +80,7 @@ set wildmode=longest,full
 silent! set wildignorecase  " Case insensitive, if supported
 
 " New windows go below or to the right of a split
-set splitbelow splitright
+set splitright
 
 " Don't assume I'm editing C; let the filetype set this
 set include=
@@ -82,30 +97,36 @@ silent! set noesckeys
 " Try to keep undos in one dir
 set undolevels=1000
 set undofile
-set undodir^=~/.vim/cache/undo
+set undodir^=/home/marco/.vim/cache/undo
 
 " Try to keep backups in one system-appropriate dir
 set backup
-set backupdir^=~/.vim/cache/backup
+set backupdir^=/home/marco/.vim/cache/backup
+
+"para que vim recuerde donde quedo
+set viminfo='1000,f1,:100,%
+
+" para fzf
+source /usr/share/doc/fzf/examples/fzf.vim
 """""SETTINGS"""""
-
-
+nnoremap <leader>w :TREPLSendLine<cr>j " send current line and move down
+vnoremap <leader>w :TREPLSendSelection<cr> " send current selection
 
 " easier navigation between split windows
-if has('nvim')
-    "ir a ventana con C-direccion
-    tmap <C-h> <C-\><C-n><C-w>h
-    tmap <C-j> <C-\><C-n><C-w>j
-    tmap <C-k> <C-\><C-n><C-w>k
-    tmap <C-l> <C-\><C-n><C-w>l
-    "Control i es esc
-    tnoremap <C-i> <C-\><C-n>
-    "C-y y la direccion de la ventana manda el texto
-    tmap <C-y>h <Up><C-\><C-n>yy<C-h>Gp
-    tmap <C-y>j <Up><C-\><C-n>yy<C-j>Gp
-    tmap <C-y>k <Up><C-\><C-n>yy<C-k>Gp
-    tmap <C-y>l <Up><C-\><C-n>yy<C-l>Gp
-endif
+"if has('nvim')
+"    "ir a ventana con C-direccion
+"    tmap <C-h> <C-\><C-n><C-w>h
+"    tmap <C-j> <C-\><C-n><C-w>j
+"    tmap <C-k> <C-\><C-n><C-w>k
+"    tmap <C-l> <C-\><C-n><C-w>l
+"    "Control i es esc
+"    tnoremap <C-i> <C-\><C-n>
+"    "C-y y la direccion de la ventana manda el texto
+"    tmap <C-y>h <Up><C-\><C-n>yy<C-h>Gp
+"    tmap <C-y>j <Up><C-\><C-n>yy<C-j>Gp
+"    tmap <C-y>k <Up><C-\><C-n>yy<C-k>Gp
+"    tmap <C-y>l <Up><C-\><C-n>yy<C-l>Gp
+"endif
 
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
@@ -122,13 +143,16 @@ nmap <S-Down> :resize -3<cr>
 
 """""MAPEOS"""""
 
+inoremap ;1 >
+inoremap ;2 <
 " Cycle through buffers
-nnoremap {b :bprevious<CR>
-nnoremap }b :bnext<CR>
-nnoremap <Leader>b :b#<CR>
+nnoremap {{ :bprevious<CR>
+nnoremap }} :bnext<CR>
+nnoremap <Leader><Leader> <C-^>
 " Cycle through quicklist/:helpgrep items
 nnoremap {c :cprevious<CR>
 nnoremap }c :cnext<CR>
+nnoremap <Leader>C :cclose<CR>
 
 "usa lead y d para copiar y pegar al portapapeles
 nnoremap <Leader>y "+y
@@ -143,9 +167,12 @@ vnoremap <Leader>p :set paste<CR>"+p:set nopaste<CR>
 vnoremap <Leader>P :set paste<CR>"+P:set nopaste<CR>
 
 " \DEL deletes the current buffer
-nnoremap <Leader><Bslash> :bdelete<CR>
+" nnoremap <Leader><Del> :BD<CR>
 " \INS edits a new buffer
 nnoremap <Leader><CR> :<C-U>enew<CR>
+
+"repite el ultimo macro
+nnoremap Q @@
 
 " \g changes directory to the current file's location
 nnoremap <Leader>c :<C-U>cd %:h<CR>:pwd<CR>
@@ -154,7 +181,7 @@ nnoremap <Leader>c :<C-U>cd %:h<CR>:pwd<CR>
 nnoremap <Leader>u :UndotreeToggle<CR>
 
 " \R reloads ~/.vimrc
-nnoremap <Leader>R :<C-U>source $MYVIMRC<CR><CR>
+nnoremap <silent> <Leader>R :<C-U>source $MYVIMRC<CR><CR>
 
 " \? types :helpgrep for me ready to enter a search pattern
 nnoremap <Leader>? :<C-U>helpgrep \c<S-Left>
@@ -170,8 +197,9 @@ nmap <Leader>g :Goyo<CR>
 "hv para help vertical
 cmap vh vert h
 
-"borra toda una palabra en insert
-nnoremap <S-BS> <C-w>
+nmap <silent> <leader>e :Semshi goto error<CR>
+nmap <silent> <leader>f :Semshi goto function next<CR>
+nmap <silent> <leader>F :Semshi goto function prev<CR>
 
 "shebang python
 nnoremap <Leader>hp #!/usr/bin/env python3
@@ -269,8 +297,12 @@ augroup END
 
 
 " air-line
-let g:airline_theme='wal'
+"let g:airline_theme='badcat'
+"let g:airline_theme='dark_minimal'
+let g:airline_theme='solarized_flood'
+
 let g:airline_powerline_fonts = 1
+
 
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
