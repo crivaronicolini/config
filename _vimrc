@@ -10,6 +10,7 @@ colorscheme PaperColor
 """""""""""
 
 call plug#begin()
+Plug 'justinmk/vim-sneak'
 Plug 'Shougo/echodoc.vim'
 Plug 'skywind3000/asyncrun.vim'
 Plug 'rbgrouleff/bclose.vim'
@@ -35,7 +36,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'frazrepo/vim-rainbow'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'ncm2/float-preview.nvim' 
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'fs111/pydoc.vim'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -184,13 +184,13 @@ vnoremap <leader>w :TREPLSendSelection<CR>
 
 "ir a ventana con C-direccion
 tmap <C-h> <C-\><C-n><C-w>h
-tmap <C-j> <C-\><C-n><C-w>j
-tmap <C-k> <C-\><C-n><C-w>k
+" tmap <C-j> <C-\><C-n><C-w>j
+" tmap <C-k> <C-\><C-n><C-w>k
 tmap <C-l> <C-\><C-n><C-w>l
 
 nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
+" nnoremap <c-k> <c-w>k
+" nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
 "Window Resizing
@@ -278,6 +278,14 @@ cnoreabbrev Q q
 "usa H para buscar info con plugin better K y M para unir líneas
 nnoremap <silent> H K<CR>
 nnoremap M J
+
+"ctrl f para subir media pantalla, devuelve el ctrl u que uso para 
+"redo y es mas comodo para usar junto con ctrl d
+" nnoremap <C-f> <C-u>
+"
+" que tal si en vez de eso uso ctrl k y j
+nnoremap <C-k> <C-u>
+nnoremap <C-j> <C-d>
 
 "usa J y K para mover entre parrafos
 nnoremap K 6k
