@@ -1,2 +1,0 @@
-#!/bin/bash
-dunst -config ~/.config/dunst/dunstrc_xr_colors

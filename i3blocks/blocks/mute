@@ -1,5 +1,0 @@
-#!/bin/bash
-
-if  amixer get Master | grep -q off; then 
-    echo "M"
-fi
