@@ -23,7 +23,6 @@ Plug 'ptzz/lf.vim'
 " Plug 'ncm2/ncm2-path'
 Plug 'kassio/neoterm'
 Plug 'roxma/nvim-yarp'
-Plug 'numirias/semshi'
 Plug 'felixhummel/setcolors.vim'
 Plug 'mgedmin/taghelper.vim'
 Plug 'mbbill/undotree'
@@ -95,6 +94,9 @@ highlight link EchoDocFloat Pmenu
 " au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
 " au User Ncm2PopupClose set completeopt=menuone
 """
+let g:sneak#s_next = 1
+
+let g:no_plugin_maps = 1
 
 "highligh de python en markdown
 let g:markdown_fenced_languages = ['python']
@@ -117,22 +119,28 @@ let python_highlight_all = 1
 let g:autopep8_on_save = 1
 let g:autopep8_disable_show_diff=1
 let g:asyncrun_open=8
-let g:asyncrun_exit = "silent call system('afplay ~/.vim/notify.wav &')"
-let g:asyncrun_status = ''
+let g:asyncrun_trim=1
+
+" let g:asyncrun_exit = "silent call system('afplay ~/.vim/notify.wav &')"
+" let g:asyncrun_status = ''
 
 let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 let g:float_preview#docked = 0
 
+set hidden
+set autowriteall
 set number
 set confirm
 set linebreak
 set incsearch
 set noswapfile
 set ttyfast
+set lazyredraw
 set noshowmode
 set writebackup
 set smartcase
 set path+=**
+set breakindent
 set expandtab
 set textwidth=0
 set tabstop=8
@@ -147,15 +155,17 @@ set backspace=indent,eol,start
 set inccommand=nosplit
 set completeopt-=preview
 set wildmode=longest,full
+set virtualedit=block,onemore
 silent! set wildignorecase  " Case insensitive, if supported
 set splitright
 set include=
-set history=2000
+set history=500
 " Delete comment leaders when joining lines, if supported
-silent! set formatoptions+=j
+set formatoptions+=j
+set formatoptions-=j
 silent! set noesckeys
 
-set undolevels=1000
+set undolevels=500
 set undofile
 set undodir^=/home/marco/.vim/cache/undo
 set backup
@@ -183,14 +193,14 @@ nnoremap <leader>w :TREPLSendLine<CR>j
 vnoremap <leader>w :TREPLSendSelection<CR>
 
 "ir a ventana con C-direccion
-tmap <C-h> <C-\><C-n><C-w>h
 " tmap <C-j> <C-\><C-n><C-w>j
 " tmap <C-k> <C-\><C-n><C-w>k
+tmap <C-h> <C-\><C-n><C-w>h
 tmap <C-l> <C-\><C-n><C-w>l
 
-nnoremap <c-j> <c-w>j
+" nnoremap <c-j> <c-w>j
 " nnoremap <c-k> <c-w>k
-" nnoremap <c-h> <c-w>h
+nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
 "Window Resizing
@@ -203,7 +213,7 @@ nmap <S-Up> :resize -3<cr>
 nnoremap <silent>{ :bprevious<CR>
 nnoremap <silent>} :bnext<CR>
 nnoremap <Leader><Leader> <C-^>
-nnoremap <Leader>b :b <C-d>
+nnoremap <silent><Leader>b :b <C-d>
 nnoremap <silent><Leader>q :Bclose<CR>
 
 "usa lead y d para copiar y pegar al portapapeles
@@ -271,9 +281,22 @@ endfunction
 
 nnoremap <Leader>c :call Go_pdb()<cr>
 
+
+"suena la campana de AsyncRun dependiendo el estado
+function! Ring_bell()
+    if g:asyncrun_status == 'succes'
+        silent call system('cvlc --play-and-exit ~/.vim/success_asyncrun.mp3 &')
+    elseif g:asyncrun_status == 'failure'
+        silent call system('cvlc --play-and-exit ~/.vim/error_asyncrun.mp3 &')
+    endif
+endfunction
+
+let g:asyncrun_exit = 'silent call Ring_bell()'
+
 "deja hacer las cosas cuando tipeas rápido
 cnoreabbrev W w
 cnoreabbrev Q q
+cnoreabbrev Qa qa
 
 "usa H para buscar info con plugin better K y M para unir líneas
 nnoremap <silent> H K<CR>
@@ -321,6 +344,13 @@ nnoremap <silent> <F4> :noh<CR>
 
 "abre el archivo actual en pdf
 map <leader>o :!zathura %:p:h/pdf/%:r.pdf >/dev/null 2>&1 &<CR><CR>
+"pone marcas en el ultimo archivo visitado de esa extension
+autocmd BufWritePost vimrc,*.vim                normal! mV
+autocmd BufWritePost *.md                       normal! mM
+autocmd BufWritePost *.py                       normal! mP
+autocmd BufWritePost *.css,*.less,*.scss        normal! mC
+autocmd BufWritePost *.html                     normal! mH
+autocmd BufWritePost *.js,*.jsx,*.ts,*.tsx      normal! mJ
 
 "corta el undo tree en cada punto, asi no se borra todo con un u
 autocmd Filetype markdown inoremap . .<c-g>u
